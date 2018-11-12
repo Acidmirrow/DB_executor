@@ -26,7 +26,7 @@ public class Sales {
                 total_revenue + "," + total_cost + "," + total_profit);
     }
 
-    public void fill(String... s) throws IllegalAccessException {
+    public void fill(String... s)  {
         region = s[0];
         country = s[1];
         item_type = s[2];

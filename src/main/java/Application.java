@@ -12,8 +12,9 @@ public class Application {
         //бд должна лежать в data/db
         //все настройки и sql Запросы вынесены в Property files
         db.db.createConnection();
-        db.db.CreateDB(args[0]);
+        db.db.CreateTable(args[0]);
         db.db.Insert(args[0]);
+
         db.db.CloseDB();
 
 

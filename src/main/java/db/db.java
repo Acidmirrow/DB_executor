@@ -26,7 +26,7 @@ public class db {
 
 
     // --------Создание таблицы--------
-    public static void CreateDB(String nameOfFileProperty) throws SQLException, IOException {
+    public static void CreateTable(String nameOfFileProperty) throws SQLException, IOException {
         statmt = conn.createStatement();
         String sql = "CREATE TABLE if not exists '" + new PropertyReader().getObjectFromProperty("db.tablename", nameOfFileProperty)+"' " +
                 ""+new PropertyReader().getObjectFromProperty("sql.createtable", nameOfFileProperty)+"";
@@ -35,14 +35,22 @@ public class db {
         System.out.println("Таблица создана или уже существует.");
     }
 
+    //---------Удаление таблицы------
+    public static void DropTable () {
+
+    }
+
     // --------Заполнение таблицы--------
-    public static void Insert(String nameOfFileProperty) throws SQLException, IOException, IllegalAccessException {
+    public static void Insert(String nameOfFileProperty) throws IOException, SQLException {
+        //подготовка стринги с sql из файла property
       String sql = "INSERT INTO '" + new PropertyReader().getObjectFromProperty("db.tablename", nameOfFileProperty)+"'" +
               ""+ new PropertyReader().getObjectFromProperty("sql.insertintotable", nameOfFileProperty)+"";
         System.out.println(sql);
-    PreparedStatement stmt = conn.prepareStatement(sql);
+        PreparedStatement stmt = conn.prepareStatement(sql);
+        //try-with-resources при чтении файла
+        try (BufferedReader br = new BufferedReader(new java.io.FileReader(FileName))) {
 
-      BufferedReader br = new BufferedReader(new java.io.FileReader(FileName));
+        //фиксация времени
         long t1 = System.nanoTime();
 
         String line;
@@ -73,19 +81,21 @@ public class db {
             stmt.setString(14, sale.total_profit);
             // Запрос не выполняется, а укладывается в буфер,
             //  который потом выполняется сразу для всех команд
-            if( l % 100_000 == 0) {
+            if (l % 100_000 == 0) {
 
                 long t2 = System.nanoTime();
                 System.out.println("" + l + " time= " + (t2 - t1) / 1000_000);
             }
-            stmt.addBatch(); // пакетный режим
-            // Выполняем все запросы разом
-
-
+        }
+            conn.setAutoCommit(false);
             stmt.executeBatch();
+            conn.commit();
+
+            }
 
         }
-    }
+
+
 
 
     // --------Закрытие соединения к БД--------
