@@ -1,3 +1,8 @@
+import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.servlet.ServletContextHandler;
+import org.eclipse.jetty.servlet.ServletHolder;
+import rest.SQL;
+
 import java.io.IOException;
 import java.sql.SQLException;
 
@@ -7,17 +12,31 @@ public class Application {
 
     public static void main(String[] args) throws SQLException, ClassNotFoundException, IOException, IllegalAccessException {
 
-        //Проект выложен на Github https://github.com/Acidmirrow/DB_executor
-        //файл с большим количеством записей должен лежать в data/files
-        //бд должна лежать в data/db
-        //все настройки и sql Запросы вынесены в Property files
-        db.db.createConnection();
-        db.db.CreateTable(args[0]);
-        db.db.Insert(args[0]);
+        ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
+        context.setContextPath("/");
 
-        db.db.CloseDB();
+        Server jettyServer = new Server(8081);
+        jettyServer.setHandler(context);
 
+        ServletHolder jerseyServlet = context.addServlet(
+                org.glassfish.jersey.servlet.ServletContainer.class, "/*");
+        jerseyServlet.setInitOrder(0);
 
+        // Tells the Jersey Servlet which REST service/class to load.
+        jerseyServlet.setInitParameter(
+                "jersey.config.server.provider.classnames",
+                SQL.class.getCanonicalName() +"," + SQL.class.getCanonicalName() );
 
+        try {
+            jettyServer.start();
+            jettyServer.join();
+        }
+        catch(Exception e){
+            System.out.println("\nОшибка:" + e.getLocalizedMessage());
+        }
+        finally {
+            jettyServer.destroy();
+        }
     }
+
 }
