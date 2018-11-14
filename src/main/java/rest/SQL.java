@@ -15,7 +15,7 @@ public class SQL {
     private String form = "<!DOCTYPE html>\n" +
             "<html>\n" +
             "<head>\n" +
-            "<base href=\"http://127.0.0.1:8080/SQL/\" target=\"_self\" />\n" +
+            "<base href=\"http://127.0.0.1:8081/SQL/\" target=\"_self\" />\n" +
             "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">\n" +
             "<title>ВВЕДИТЕ SQL-ЗАПРОС</title>\n" +
             "</head>\n" +
@@ -49,7 +49,7 @@ public class SQL {
           "         </table>\n" +
           "         </form>";*/
 
-    //http://127.0.0.1:8080/SQL/SQL_rq
+    //http://127.0.0.1:8081/SQL/SQL_rq
     @GET
     @Path("SQL_rq")
     @Produces(MediaType.TEXT_HTML)
@@ -58,7 +58,7 @@ public class SQL {
         return form;
     }
 
-    //http://127.0.0.1:8080/SQL/SQL_rs
+    //http://127.0.0.1:8081/SQL/SQL_rs
     @POST
     @Path("SQL_rs")
     @Produces(MediaType.APPLICATION_JSON)

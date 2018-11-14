@@ -16,7 +16,7 @@ public class saleDAO {
     {
         conn = null;
         Class.forName("org.sqlite.JDBC");
-        conn = DriverManager.getConnection("jdbc:sqlite:DataBase/TEST1.s3db");
+        conn = DriverManager.getConnection("jdbc:sqlite:data/db/TEST1.s3db");
 
         System.out.println("База Подключена!");
     }
