@@ -20,6 +20,7 @@ public class Manager {
             dbManager.openDB();
             rs = dbManager.selectDB(sql);
 
+
         } finally {
 
             dbManager.closeDB();

@@ -144,6 +144,9 @@ public class saleDAO {
             rs.add(sale);
         }
 
+
         return rs;
     }
+
+
 }
